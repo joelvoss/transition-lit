@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Example</title>
+    <style>
+      .my-node-enter {
+        opacity: 0;
+      }
+      .my-node-enter-active,
+      .my-node-enter-done {
+        opacity: 1;
+        transition: opacity 200ms;
+      }
+      .my-node-exit {
+        opacity: 1;
+      }
+      .my-node-exit-active,
+      .my-node-exit-done {
+        opacity: 0;
+        transition: opacity 200ms;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script src="./index.tsx"></script>
+  </body>
+</html>
