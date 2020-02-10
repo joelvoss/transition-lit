@@ -6,8 +6,8 @@ import {
   Transition,
   TransitionGroup,
   TransitionProps,
-  State,
   CSSTransition,
+  State,
 } from '../src/index';
 
 const App = () => {
