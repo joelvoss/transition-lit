@@ -25,10 +25,10 @@
     "test": "jvdx test",
     "validate": "npm run format && npm run lint && npm run test",
     "clean": "jvdx clean dist example/dist example/node_modules example/yarn.lock",
-    "prepublish": "echo 'not implemented' #npm run build"
+    "prepublish": "npm run build"
   },
   "dependencies": {
-    "@babel/runtime": "^7.8.4",
+    "@babel/runtime": "7.8.4",
     "dom-helpers": "5.1.3",
     "react": "16.12.0",
     "react-dom": "16.12.0"
