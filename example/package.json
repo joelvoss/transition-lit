@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "react-app-polyfill": "1.0.6",
-    "uuid": "3.4.0"
+    "uuid": "7.0.2"
   },
   "alias": {
     "react": "../node_modules/react",
@@ -19,7 +19,7 @@
     "typescript": "../node_modules/typescript"
   },
   "devDependencies": {
-    "@types/uuid": "3.4.7",
+    "@types/uuid": "7.0.0",
     "parcel": "1.12.4"
   }
 }
