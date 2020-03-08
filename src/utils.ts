@@ -125,7 +125,10 @@ export function getNextChildMapping(
       });
     } else if (!hasNext && hasPrev && !isLeaving) {
       // item is old (exiting)
-      children[key] = React.cloneElement(child, { in: false });
+      children[key] = React.cloneElement(child, {
+        in: false,
+        unmountOnExit: true,
+      });
     } else if (hasNext && hasPrev && React.isValidElement<any>(prevChild)) {
       // item hasn't changed transition states
       // copy over the last transition props;
