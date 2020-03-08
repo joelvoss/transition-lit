@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 import {
   Transition,
   TransitionGroup,
@@ -98,7 +98,7 @@ export const TransitionGroupExample = () => {
       </button>
       <TransitionGroup>
         {items.map(({ id }) => (
-          <FadeTransition key={id} unmountOnExit>
+          <FadeTransition key={id}>
             {id}
             <button
               onClick={() =>
@@ -116,12 +116,18 @@ export const TransitionGroupExample = () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+const CSSItem = React.forwardRef<any, { children: React.ReactNode }>(
+  ({ children }, ref) => {
+    return <div ref={ref}>{children}</div>;
+  },
+);
+
 const CSSTransitionExample = () => {
   const [state, setState] = React.useState(false);
   return (
     <div>
       <CSSTransition in={state} timeout={200} classNames="my-node">
-        <div>I'll receive my-node-* classes</div>
+        <CSSItem>I'll receive my-node-* classes</CSSItem>
       </CSSTransition>
       <button onClick={() => setState(state => !state)}>Toggle</button>
     </div>
