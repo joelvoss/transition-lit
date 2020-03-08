@@ -77,11 +77,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-## API
+#### Props
 
-### Props
-
-#### children
+##### children
 
 Use the function as a child pattern to expose the current transition state
 to your child components. Possible transition states are: `entering`, `entered`,
@@ -96,7 +94,7 @@ to your child components. Possible transition states are: `entering`, `entered`,
 _type: Function | Element_  
 _required_
 
-#### in
+##### in
 
 Triggers enter or exit transitions.
 `true` triggers the enter transition, `false` triggers the exit transition.
@@ -104,7 +102,7 @@ Triggers enter or exit transitions.
 _type: boolean_  
 _default: false_
 
-#### mountOnEnter
+##### mountOnEnter
 
 By default a child component is mounted immediately along the `Transition`
 component. Set the `mountOnEnter` prop if you want to defer mounting to the
@@ -113,7 +111,7 @@ first enter transition.
 _type: boolean_  
 _default: false_
 
-#### unmountOnExit
+##### unmountOnExit
 
 By default a child component stays mounted event after the exit transition ends.
 Set the `unmountOnExit` prop to disabled this behaviour and unmount the child
@@ -122,7 +120,7 @@ component after it finishes exiting.
 _type: boolean_  
 _default: false_
 
-#### appear
+##### appear
 
 By default a child component is not transitioned in if it is shown when the
 `Transition` component mounts. By setting the `appear` prop you can force a
@@ -134,21 +132,21 @@ enter transition on mount.
 _type: boolean_  
 _default: false_
 
-#### enter
+##### enter
 
 Enable/disabled enter transitions.
 
 _type: boolean_  
 _default: false_
 
-#### exit
+##### exit
 
 Enable/disable exit transitions.
 
 _type: boolean_  
 _default: false_
 
-#### timeout
+##### timeout
 
 Duration of a transition in milliseconds.  
 You can provide a single number for all transition phases or an object
@@ -169,7 +167,7 @@ timeout={{
 _type: number | { enter?: number, exit?: number, appear?: number }_  
 _required_
 
-#### onEnter
+##### onEnter
 
 Callback fired before the `entering` status is applied. The node argument is
 the currently transitioned DOMElement. The isAppearing parameter is indicating
@@ -178,7 +176,7 @@ if the transition happens on initial mount.
 _type: Function(node: HtmlElement, isAppearing: boolean): void_  
 _default: Function(): void_
 
-#### onEntering
+##### onEntering
 
 Callback fired after the `entering` status is applied. The node argument is
 the currently transitioned DOMElement. The isAppearing parameter is indicating
@@ -187,7 +185,7 @@ if the transition happens on initial mount.
 _type: Function(node: HtmlElement, isAppearing: boolean): void_  
 _default: Function(): void_
 
-#### onEntered
+##### onEntered
 
 Callback fired after the `entered` status is applied. The node argument is
 the currently transitioned DOMElement. The isAppearing parameter is indicating
@@ -196,26 +194,85 @@ if the transition happens on initial mount.
 _type: Function(node: HtmlElement, isAppearing: boolean): void_  
 _default: Function(): void_
 
-#### onExit
+##### onExit
 
 Callback fired before the `exiting` status is applied.
 
 _type: Function(node: HtmlElement): void_  
 _default: Function(): void_
 
-#### onExiting
+##### onExiting
 
 Callback fired after the `exiting` status is applied.
 
 _type: Function(node: HtmlElement): void_  
 _default: Function(): void_
 
-#### onExited
+##### onExited
 
 Callback fired after the `exited` status is applied.
 
 _type: Function(node: HtmlElement): void_  
 _default: Function(): void_
+
+---
+
+### `<TransitionGroup>`
+
+The `<TransitionGroup>` component manages a set of transition components
+(`<Transition>` and `<CSSTransition>`) in a list. Like with the transition
+components, `<TransitionGroup>` is a state machine for managing the mounting and
+unmounting of components over time.
+
+Consider the example below. As items are removed or added to the TodoList the
+in prop is toggled automatically by the `<TransitionGroup>`.
+
+> **Note:** `<TransitionGroup>` does not define any animation behavior! Exactly
+> how a list item animates is up to the individual transition component. This
+> means you can mix and match animations across different list items.
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { v4 as uuid } from 'uuid';
+import { Transition, TransitionGroup } from 'transition-lit';
+
+const App = () => {
+  const [items, setItems] = React.useState([
+    { id: uuid() },
+    { id: uuid() },
+    { id: uuid() },
+    { id: uuid() },
+  ]);
+
+  const addItem = () => {
+    setItems(items => [...items, { id: uuid() }]);
+  }
+
+  const removeItem = id => {
+    setItems(items => items.filter(item => item.id !== id);
+  }
+
+  return (
+    <>
+      <button onClick={() => addItem()}>Add</button>
+
+      <TransitionGroup>
+        {items.map(({ id }) => (
+          <CSSTransition key={id} timeout={200} classNames="my-node">
+            <div>
+              <span>{id}</span>
+              <button onClick={() => removeItem(id)}>Remove</button>
+            </div>
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
+    </>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
 
 ---
 
