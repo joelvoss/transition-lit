@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, cleanup, wait } from '@testing-library/react';
+// @ts-ignore
+import { render, cleanup, waitFor } from '@testing-library/react';
 import { Transition } from '../transition';
 import { TransitionGroup } from '../transition-group';
 
@@ -65,7 +66,7 @@ describe(`TransitionGroup`, () => {
     }
 
     const { rerender } = render(<Parent />);
-    await wait(() =>
+    await waitFor(() =>
       expect(log).toEqual([
         '0-exited',
         '0-appear',
@@ -76,7 +77,7 @@ describe(`TransitionGroup`, () => {
 
     log = [];
     rerender(<Parent count={2} />);
-    await wait(() =>
+    await waitFor(() =>
       expect(log).toEqual([
         '0-appeared',
         '1-exited',
@@ -88,7 +89,7 @@ describe(`TransitionGroup`, () => {
 
     log = [];
     rerender(<Parent count={1} />);
-    await wait(() =>
+    await waitFor(() =>
       expect(log).toEqual([
         '0-appeared',
         '1-entered',

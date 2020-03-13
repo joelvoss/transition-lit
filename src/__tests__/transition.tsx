@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, cleanup, wait } from '@testing-library/react';
+// @ts-ignore
+import { render, cleanup, waitFor } from '@testing-library/react';
 import { Transition } from '../transition';
 
 describe('Transition', () => {
@@ -33,10 +34,10 @@ describe('Transition', () => {
 
     expect(getByText(/entering/i)).toBeInTheDocument();
     expect(cb).toBeCalledTimes(1);
-    await wait(() => expect(getByText(/entered/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/entered/i)).toBeInTheDocument());
   });
 
-  it('should pass filtered props to children', () => {
+  it('should pass filtered props to children', async () => {
     const ChildComponent = React.forwardRef((props, ref: any) => {
       return <div ref={ref}>{JSON.stringify(props)}</div>;
     });
@@ -65,13 +66,15 @@ describe('Transition', () => {
       </Transition>,
     );
 
-    expect(asFragment()).toMatchInlineSnapshot(`
+    await waitFor(() =>
+      expect(asFragment()).toMatchInlineSnapshot(`
       <DocumentFragment>
         <div>
           {"foo":"foo","bar":"bar"}
         </div>
       </DocumentFragment>
-    `);
+    `),
+    );
   });
 
   it('should mount/unmount immediately if not have enter/exit timeout', async () => {
@@ -94,7 +97,7 @@ describe('Transition', () => {
       </Transition>,
     );
 
-    await wait(() => {
+    await waitFor(() => {
       expect(getByText(/exited/i)).toBeInTheDocument();
       expect(calledAfterTimeout).toBe(false);
     });
@@ -118,7 +121,7 @@ describe('Appearing timeout', () => {
       </Transition>,
     );
 
-    await wait(() => {
+    await waitFor(() => {
       expect(getByText(/entered/i)).toBeInTheDocument();
       expect(calledBeforeEntered).toBe(true);
     });
@@ -136,7 +139,7 @@ describe('Appearing timeout', () => {
       isCausedLate = true;
     }, 15);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(getByText(/entered/i)).toBeInTheDocument();
       expect(isCausedLate).toBe(true);
     });
@@ -196,8 +199,8 @@ describe('Entering', () => {
       </Transition>,
     );
 
-    await wait(() => expect(getByText(/entering/i)).toBeInTheDocument());
-    await wait(() => expect(getByText(/entered/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/entering/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/entered/i)).toBeInTheDocument());
     expect(count).toBe(3);
   });
 });
@@ -250,8 +253,8 @@ describe('Exiting', () => {
       </Transition>,
     );
 
-    await wait(() => expect(getByText(/exiting/i)).toBeInTheDocument());
-    await wait(() => expect(getByText(/exited/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/exiting/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/exited/i)).toBeInTheDocument());
     expect(count).toBe(3);
   });
 });
@@ -285,7 +288,7 @@ describe('mountOnEnter', () => {
     );
 
     expect(getByText(/entering/i)).toBeInTheDocument();
-    await wait(() => expect(getByText(/entered/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/entered/i)).toBeInTheDocument());
   });
 
   it('should stay mounted after exiting', async () => {
@@ -295,10 +298,10 @@ describe('mountOnEnter', () => {
     expect(asFragment()).toMatchInlineSnapshot(`<DocumentFragment />`);
 
     rerender(<MountTransition initialIn={true} />);
-    await wait(() => expect(getByText(/entered/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/entered/i)).toBeInTheDocument());
 
     rerender(<MountTransition initialIn={false} />);
-    await wait(() => expect(getByText(/exited/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/exited/i)).toBeInTheDocument());
   });
 });
 
@@ -331,7 +334,7 @@ describe('unmountOnExit', () => {
     );
 
     expect(getByText(/entering/i)).toBeInTheDocument();
-    await wait(() => expect(getByText(/entered/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/entered/i)).toBeInTheDocument());
   });
 
   it('should unmount after exiting', async () => {
@@ -341,10 +344,10 @@ describe('unmountOnExit', () => {
     expect(asFragment()).toMatchInlineSnapshot(`<DocumentFragment />`);
 
     rerender(<UnmountTransition initialIn={true} />);
-    await wait(() => expect(getByText(/entered/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/entered/i)).toBeInTheDocument());
 
     rerender(<UnmountTransition initialIn={false} />);
-    await wait(() => expect(getByText(/exited/i)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/exited/i)).toBeInTheDocument());
     expect(asFragment()).toMatchInlineSnapshot(`<DocumentFragment />`);
   });
 });
