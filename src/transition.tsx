@@ -1,16 +1,18 @@
 import React from 'react';
 import TransitionGroupContext from './transition-group-context';
-import { TransitionProps } from './types';
+import {
+  TransitionProps,
+  TransitionStatus,
+  UNMOUNTED,
+  EXITED,
+  ENTERING,
+  ENTERED,
+  EXITING,
+} from './types';
 
-export enum Phase {
-  UNMOUNTED = 'unmounted',
-  ENTERING = 'entering',
-  ENTERED = 'entered',
-  EXITING = 'exiting',
-  EXITED = 'exited',
-}
-
-export const Transition: React.FC<TransitionProps> = props => {
+export const Transition: React.FC<TransitionProps> = (
+  props: TransitionProps,
+) => {
   const { children, ...childProps } = props;
   let nodeRef = React.useRef<HTMLElement>();
 
@@ -18,23 +20,23 @@ export const Transition: React.FC<TransitionProps> = props => {
   // In the context of a TransitionGroup all enters are really appears
   let appear = context && !context.isMounting ? props.enter : props.appear;
 
-  let initialStatus;
+  let initialStatus: TransitionStatus;
   if (props.in) {
     if (appear) {
-      initialStatus = Phase.EXITED;
+      initialStatus = EXITED;
     } else {
-      initialStatus = Phase.ENTERED;
+      initialStatus = ENTERED;
     }
   } else {
     if (props.unmountOnExit || props.mountOnEnter) {
-      initialStatus = Phase.UNMOUNTED;
+      initialStatus = UNMOUNTED;
     } else {
-      initialStatus = Phase.EXITED;
+      initialStatus = EXITED;
     }
   }
 
   const [state, setState] = React.useState<{
-    status: Phase;
+    status: TransitionStatus;
     node?: HTMLElement;
     nextTimeout?: number;
     appearing?: boolean;
@@ -43,8 +45,8 @@ export const Transition: React.FC<TransitionProps> = props => {
   });
 
   // getDerivedStateFromProps
-  if (props.in && state.status === Phase.UNMOUNTED) {
-    setState({ status: Phase.EXITED });
+  if (props.in && state.status === UNMOUNTED) {
+    setState({ status: EXITED });
   }
 
   React.useEffect(() => {
@@ -66,27 +68,27 @@ export const Transition: React.FC<TransitionProps> = props => {
     };
 
     switch (status) {
-      case Phase.ENTERING: {
+      case ENTERING: {
         props.onEntering && props.onEntering(node!, appearing);
 
         onTransitionEnd(() => {
-          setState({ status: Phase.ENTERED, node, appearing });
+          setState({ status: ENTERED, node, appearing });
         });
         break;
       }
-      case Phase.ENTERED: {
+      case ENTERED: {
         props.onEntered && props.onEntered(node!, appearing);
         break;
       }
-      case Phase.EXITING: {
+      case EXITING: {
         props.onExiting && props.onExiting(node!);
 
         onTransitionEnd(() => {
-          setState({ status: Phase.EXITED, node });
+          setState({ status: EXITED, node });
         });
         break;
       }
-      case Phase.EXITED: {
+      case EXITED: {
         props.onExited && props.onExited(node!);
         break;
       }
@@ -128,7 +130,7 @@ export const Transition: React.FC<TransitionProps> = props => {
       // If we are mounting and running this it means appear _must_ be set
       if (!mounting && !enter) {
         setState({
-          status: Phase.ENTERED,
+          status: ENTERED,
           node,
           nextTimeout: undefined,
           appearing: undefined,
@@ -141,7 +143,7 @@ export const Transition: React.FC<TransitionProps> = props => {
       const nextTimeout = appearing ? timeouts.appear : timeouts.enter;
 
       props.onEnter && props.onEnter(node, appearing);
-      setState({ status: Phase.ENTERING, node, nextTimeout, appearing });
+      setState({ status: ENTERING, node, nextTimeout, appearing });
     },
     [context, getTimeouts, props],
   );
@@ -156,7 +158,7 @@ export const Transition: React.FC<TransitionProps> = props => {
       // Skip right into EXITED if the exit animation is disabled
       if (!exit) {
         setState({
-          status: Phase.EXITED,
+          status: EXITED,
           node,
           nextTimeout: undefined,
           appearing: undefined,
@@ -168,7 +170,7 @@ export const Transition: React.FC<TransitionProps> = props => {
 
       props.onExit && props.onExit(node);
       setState({
-        status: Phase.EXITING,
+        status: EXITING,
         node,
         nextTimeout: timeouts.exit,
         appearing: undefined,
@@ -181,18 +183,18 @@ export const Transition: React.FC<TransitionProps> = props => {
 
   // Update the current transition status
   const updateStatus = React.useCallback(
-    (mounting = false, nextStatus: Phase | null) => {
+    (mounting = false, nextStatus: TransitionStatus | null) => {
       if (nextStatus !== null) {
         // nextStatus will always be ENTERING or EXITING.
         const node = nodeRef.current as HTMLElement;
 
-        if (nextStatus === Phase.ENTERING) {
+        if (nextStatus === ENTERING) {
           performEnter(node, mounting);
         } else {
           performExit(node);
         }
-      } else if (props.unmountOnExit && state.status === Phase.EXITED) {
-        setState({ status: Phase.UNMOUNTED });
+      } else if (props.unmountOnExit && state.status === EXITED) {
+        setState({ status: UNMOUNTED });
       }
     },
     [performEnter, performExit, props.unmountOnExit, state.status],
@@ -200,23 +202,23 @@ export const Transition: React.FC<TransitionProps> = props => {
 
   const mounted = React.useRef<boolean>(false);
   React.useEffect(() => {
-    let nextStatus = null;
+    let nextStatus: TransitionStatus | null = null;
     const { status } = state;
 
     if (props.in) {
-      if (status !== Phase.ENTERING && status !== Phase.ENTERED) {
-        nextStatus = Phase.ENTERING;
+      if (status !== ENTERING && status !== ENTERED) {
+        nextStatus = ENTERING;
       }
     } else {
-      if (status === Phase.ENTERING || status === Phase.ENTERED) {
-        nextStatus = Phase.EXITING;
+      if (status === ENTERING || status === ENTERED) {
+        nextStatus = EXITING;
       }
     }
     updateStatus(!mounted.current, nextStatus);
     mounted.current = true;
   }, [state, props, updateStatus]);
 
-  if (state.status === Phase.UNMOUNTED) {
+  if (state.status === UNMOUNTED) {
     return null;
   }
 
@@ -237,7 +239,7 @@ export const Transition: React.FC<TransitionProps> = props => {
 
   const child =
     typeof children === 'function'
-      ? children(state.status, childProps)
+      ? children(state.status)
       : React.Children.only(children);
 
   nodeRef = child.ref || nodeRef;

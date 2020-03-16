@@ -1,50 +1,78 @@
-import { Phase } from './transition';
+import { ReactElement, ReactNode } from 'react';
 
-export type EnterFn = (node: HTMLElement, isAppearing?: boolean) => void;
-export type ExitFn = (node: HTMLElement) => void;
+export type EnterHandler = (node: HTMLElement, isAppearing?: boolean) => void;
+export type ExitHandler = (node: HTMLElement) => void;
 
-export interface TransitionProps {
+export const UNMOUNTED = 'unmounted';
+export const EXITED = 'exited';
+export const ENTERING = 'entering';
+export const ENTERED = 'entered';
+export const EXITING = 'exiting';
+
+export interface TransitionActions {
+  appear?: boolean;
+  enter?: boolean;
+  exit?: boolean;
+}
+
+interface BaseTransitionProps {
   in?: boolean;
   mountOnEnter?: boolean;
   unmountOnExit?: boolean;
-  appear?: boolean;
-  enter?: boolean;
-  exit?: boolean;
-  timeout?: number | { enter?: number; exit?: number; appear?: number };
-  onEnter?: EnterFn;
-  onEntering?: EnterFn;
-  onEntered?: EnterFn;
-  onExit?: ExitFn;
-  onExiting?: ExitFn;
-  onExited?: ExitFn;
+  onEnter?: EnterHandler;
+  onEntering?: EnterHandler;
+  onEntered?: EnterHandler;
+  onExit?: ExitHandler;
+  onExiting?: ExitHandler;
+  onExited?: ExitHandler;
+  children?: TransitionChildren;
+  [prop: string]: any;
 }
 
-export type State =
-  | Phase.ENTERING
-  | Phase.ENTERED
-  | Phase.EXITING
-  | Phase.EXITED;
+export type TransitionStatus =
+  | typeof ENTERING
+  | typeof ENTERED
+  | typeof EXITING
+  | typeof EXITED
+  | typeof UNMOUNTED;
 
-export interface TransitionGroupContext {
-  isMounting?: boolean;
+export type TransitionChildren =
+  | ReactNode
+  | ((status: TransitionStatus) => ReactNode);
+
+export interface TransitionProps extends BaseTransitionProps {
+  timeout: number | { appear?: number; enter?: number; exit?: number };
 }
 
-export interface TransitionGroupProps {
-  appear?: boolean;
-  enter?: boolean;
-  exit?: boolean;
-  childFactory?: (child: React.ReactNode) => React.ReactNode;
-}
+////////////////////////////////////////////////////////////////////////////////
 
 export type ChildMapping = {
-  [key: string]: React.ReactNode;
+  [x: string]: ReactNode;
 };
 
-export interface TransitionGroupState {
-  contextValue: { isMounting: boolean };
-  children: ChildMapping;
-}
+////////////////////////////////////////////////////////////////////////////////
 
 export interface CSSTransitionProps extends TransitionProps {
   classNames?: string | { [key: string]: string };
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+export interface TransitionGroupProps extends TransitionActions {
+  children?:
+    | ReactElement<TransitionProps>
+    | Array<ReactElement<TransitionProps>>;
+  childFactory?(child: ReactNode): ReactNode;
+  [prop: string]: any;
+}
+
+export interface TransitionGroupState {
+  contextValue: ContextValue;
+  children: ChildMapping;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+export type ContextValue = {
+  isMounting?: boolean;
+};

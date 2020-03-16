@@ -6,14 +6,18 @@ import {
   getNextChildMapping,
 } from './utils';
 import {
-  TransitionGroupState,
   TransitionGroupProps,
+  TransitionGroupState,
   ChildMapping,
 } from './types';
+
+////////////////////////////////////////////////////////////////////////////////
 
 const values =
   Object.values ||
   ((obj: { [key: string]: any }) => Object.keys(obj).map(k => obj[k]));
+
+////////////////////////////////////////////////////////////////////////////////
 
 export const TransitionGroup: React.FC<TransitionGroupProps> = props => {
   const mounted = React.useRef<boolean | null>(null);

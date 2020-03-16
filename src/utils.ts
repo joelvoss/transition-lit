@@ -1,9 +1,9 @@
-import React from 'react';
-import { TransitionGroupProps, ChildMapping } from './types';
+import React, { ReactElement, ReactNode } from 'react';
+import { ChildMapping, TransitionGroupProps } from './types';
 
-type MapFn = (child: React.ReactElement) => React.ReactElement;
+type MapFn = (child: ReactElement) => ReactElement;
 
-export function getChildMapping(children: React.ReactNode, mapFn?: MapFn) {
+export function getChildMapping(children: ReactNode, mapFn?: MapFn) {
   let result: ChildMapping = Object.create(null);
   if (children) {
     React.Children.forEach(children, child => {

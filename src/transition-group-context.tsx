@@ -1,4 +1,4 @@
 import React from 'react';
-import { TransitionGroupContext } from './types';
+import { ContextValue } from './types';
 
-export default React.createContext<TransitionGroupContext | null>(null);
+export default React.createContext<ContextValue | null>(null);
