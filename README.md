@@ -274,6 +274,60 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
+#### Props
+
+##### children
+
+A set of `<Transition>` components, that are toggled in and out as they leave.
+The `<TransitionGroup>` will inject specific transition props, so remember to
+spread them through if you are wrapping the `<Transition>` component.
+
+In case you want to transition content of a single transition child (e.g. route-
+transitions or carousel-/image-transitions) you have to change the `key`
+prop of the transition child which forces `<TransitionGroup>` to transition
+the child out and back in again.
+
+_type: any_
+
+##### appear
+
+A convenience prop that enables or disables appear animations for all children.
+
+> **Note:** Specifying this will override any defaults set on individual
+> children `<Transitions>`.
+
+_type: boolean_
+
+##### enter
+
+A convenience prop that enables or disables enter animations for all children.
+
+> **Note:** Specifying this will override any defaults set on individual
+> children `<Transitions>`.
+
+_type: boolean_
+
+##### exit
+
+A convenience prop that enables or disables exit animations for all children.
+
+> **Note:** Specifying this will override any defaults set on individual
+> children `<Transitions>`.
+
+_type: boolean_
+
+##### childFactory
+
+You may need to apply reactive updates to a child as it is exiting.
+This is generally done by using cloneElement however in the case of an exiting
+child the element has already been removed and not accessible to the consumer.
+
+If you do need to update a child as it leaves you can provide a childFactory to
+wrap every child, even the ones that are leaving.
+
+_type: Function(child: ReactNode) -> ReactNode_  
+_default: child => child_
+
 ---
 
 This project was bootstrapped with [jvdx](https://github.com/joelvoss/jvdx).
