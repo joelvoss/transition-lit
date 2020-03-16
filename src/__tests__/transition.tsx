@@ -7,7 +7,6 @@ describe('Transition', () => {
   afterEach(cleanup);
 
   it('should not transition on mount', async () => {
-    // Arrange
     const { getByText } = render(
       <Transition
         in
