@@ -1,13 +1,18 @@
 import React from 'react';
 import addOneClass from 'dom-helpers/addClass';
 import removeOneClass from 'dom-helpers/removeClass';
-import { CSSTransitionProps, EnterFn, ExitFn } from './types';
 import { Transition } from './transition';
+import { CSSTransitionProps, EnterHandler, ExitHandler } from './types';
 
 const addClassToNode = (node: HTMLElement, classes: string) =>
   node && classes && classes.split(' ').forEach(c => addOneClass(node, c));
+
+////////////////////////////////////////////////////////////////////////////////
+
 const removeClassFromNode = (node: HTMLElement, classes: string) =>
   node && classes && classes.split(' ').forEach(c => removeOneClass(node, c));
+
+////////////////////////////////////////////////////////////////////////////////
 
 export const CSSTransition: React.FC<CSSTransitionProps> = ({
   classNames = '',
@@ -75,7 +80,7 @@ export const CSSTransition: React.FC<CSSTransitionProps> = ({
     }
   };
 
-  const onEnter: EnterFn = (node, appearing) => {
+  const onEnter: EnterHandler = (node, appearing) => {
     removeClasses(node, 'exit');
     addClass(node, appearing ? 'appear' : 'enter', 'base');
 
@@ -84,7 +89,7 @@ export const CSSTransition: React.FC<CSSTransitionProps> = ({
     }
   };
 
-  const onEntering: EnterFn = (node, appearing) => {
+  const onEntering: EnterHandler = (node, appearing) => {
     const type = appearing ? 'appear' : 'enter';
     addClass(node, type, 'active');
 
@@ -93,7 +98,7 @@ export const CSSTransition: React.FC<CSSTransitionProps> = ({
     }
   };
 
-  const onEntered: EnterFn = (node, appearing) => {
+  const onEntered: EnterHandler = (node, appearing) => {
     const type = appearing ? 'appear' : 'enter';
     removeClasses(node, type);
     addClass(node, type, 'done');
@@ -103,7 +108,7 @@ export const CSSTransition: React.FC<CSSTransitionProps> = ({
     }
   };
 
-  const onExit: ExitFn = node => {
+  const onExit: ExitHandler = node => {
     removeClasses(node, 'appear');
     removeClasses(node, 'enter');
     addClass(node, 'exit', 'base');
@@ -113,7 +118,7 @@ export const CSSTransition: React.FC<CSSTransitionProps> = ({
     }
   };
 
-  const onExiting: ExitFn = node => {
+  const onExiting: ExitHandler = node => {
     addClass(node, 'exit', 'active');
 
     if (props.onExiting) {
@@ -121,7 +126,7 @@ export const CSSTransition: React.FC<CSSTransitionProps> = ({
     }
   };
 
-  const onExited: ExitFn = node => {
+  const onExited: ExitHandler = node => {
     removeClasses(node, 'exit');
     addClass(node, 'exit', 'done');
 
