@@ -13,8 +13,8 @@ const App = () => {
       </p>
       <button onClick={() => setShow(show => !show)}>Toggle</button>
 
-      <CSSTransition in={show} timeout={200} classNames="my-node">
-        <div className="custom-class">I'll receive my-node-* classes</div>
+      <CSSTransition in={show} timeout={300} classNames="alert">
+        <div className="custom-class">I'll receive alert-* classes</div>
       </CSSTransition>
     </div>
   );
