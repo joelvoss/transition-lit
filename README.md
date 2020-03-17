@@ -20,6 +20,9 @@ yarn add transition-lit
 
 **transition-lit** exposes a handful of components demonstrated in this section.
 
+- [`<Transition />`](#transition)
+- [`<TransitionGroup />`](#transitiongroup)
+
 ### `<Transition />`
 
 The `<Transition />` component is the base component and lets you describe
@@ -217,7 +220,7 @@ _default: Function(): void_
 
 ---
 
-### `<TransitionGroup>`
+### `<TransitionGroup />`
 
 The `<TransitionGroup>` component manages a set of transition components
 (`<Transition>` and `<CSSTransition>`) in a list. Like with the transition
@@ -328,8 +331,70 @@ wrap every child, even the ones that are leaving.
 _type: Function(child: ReactNode) -> ReactNode_  
 _default: child => child_
 
+## `<CSSTransition />`
+
+A transition component inspired by [ng-animate][ng-animate]. It should be used
+if animations are beeing done by declaring transitions via CSS classes.
+
+`CSSTransition` applies a pair of class names during the appear, enter, and
+exit states of the transition. The first class is applied and then a second
+`*-active` class in order to activate the CSS transition. After the transition,
+matching `*-done` class names are applied to persist the transition state.
+
+```js
+function App() {
+  const [show, setShow] = React.useState(false);
+
+  return (
+    <div>
+      <CSSTransition in={show} timeout={200} classNames="my-node">
+        <div>I'll receive my-node-* classes</div>
+      </CSSTransition>
+      <button onClick={() => setShow(show => !show)}>Toggle</button>
+    </div>
+  );
+}
+```
+
+When the `in` prop is set to `true`, the child component will first receive the
+the class `my-node-enter`, then the `my-node-enter-active` will be added in the
+next tick.
+
+> **Note:** `CSSTransition` forces a reflow before adding the
+> `my-node-enter-active`. This is an important trick because it allows us to
+> transition between `my-node-enter` and `my-node-enter-active` even though
+> they were added immediately one after another. Most notably, this is what
+> makes it possible for us to animate appearance.
+
+```css
+.my-node-enter {
+  opacity: 0;
+}
+.my-node-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.my-node-enter-done,
+.my-node-exit {
+  opacity: 1;
+}
+.my-node-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+.my-node-exit-done {
+  opacity: 0;
+}
+```
+
+Keep in mind: `*-active` classes represent which styles you want to animate to.
+
+> **Note:** If you're using the appear prop, make sure to define styles for
+> `appear-*` classes as well.
+
 ---
 
 This project was bootstrapped with [jvdx](https://github.com/joelvoss/jvdx).
 
 [react-spring]: https://www.react-spring.io/
+[ng-animate]: https://github.com/jiayihu/ng-animate
