@@ -24,7 +24,7 @@
     "format": "jvdx format",
     "test": "jvdx test",
     "validate": "npm run format && npm run lint && npm run test",
-    "clean": "jvdx clean dist example/dist example/node_modules example/yarn.lock",
+    "clean": "jvdx clean dist && (cd examples/basic && yarn clean); (cd examples/transition-group && yarn clean); (cd examples/css-transition && yarn clean);",
     "prepublish": "npm run build"
   },
   "dependencies": {
