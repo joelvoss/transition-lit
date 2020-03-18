@@ -20,8 +20,9 @@ yarn add transition-lit
 
 **transition-lit** exposes a handful of components demonstrated in this section.
 
-- [`<Transition />`](#transition)
-- [`<TransitionGroup />`](#transitiongroup)
+- [Jump to `<Transition />`](#transition)
+- [Jump to `<TransitionGroup />`](#transitiongroup)
+- [Jump to `<CSSTransition />`](#csstransition)
 
 ### `<Transition />`
 
@@ -331,7 +332,7 @@ wrap every child, even the ones that are leaving.
 _type: Function(child: ReactNode) -> ReactNode_  
 _default: child => child_
 
-## `<CSSTransition />`
+### `<CSSTransition />`
 
 A transition component inspired by [ng-animate][ng-animate]. It should be used
 if animations are beeing done by declaring transitions via CSS classes.
@@ -391,6 +392,90 @@ Keep in mind: `*-active` classes represent which styles you want to animate to.
 
 > **Note:** If you're using the appear prop, make sure to define styles for
 > `appear-*` classes as well.
+
+#### Props
+
+##### classNames
+
+The animation classNames applied to the component as it appears, enters, exits
+or has finished the transition. A single name can be provided and it will be
+suffixed for each stage:
+
+```js
+<CSSTransition in={show} timeout={200} classNames="fade">
+  <div>I'll receive my-node-* classes</div>
+</CSSTransition>
+
+// applies fade-appear, fade-appear-active, fade-appear-done, fade-enter,
+// fade-enter-active, fade-enter-done, fade-exit, fade-exit-active,
+// and fade-exit-done.
+```
+
+> **Note:** `fade-appear-done` and `fade-enter-done` will both be applied.
+> This allows you to define different behavior for when appearing is done and
+> when regular entering is done, using selectors like
+> `.fade-enter-done:not(.fade-appear-done)`.
+
+Each individual classNames can also be specified independently like:
+
+```js
+classNames={{
+ appear: 'my-appear',
+ appearActive: 'my-active-appear',
+ appearDone: 'my-done-appear',
+ enter: 'my-enter',
+ enterActive: 'my-active-enter',
+ enterDone: 'my-done-enter',
+ exit: 'my-exit',
+ exitActive: 'my-active-exit',
+ exitDone: 'my-done-exit',
+}}
+```
+
+_type: string | { appear?: string, appearActive?: string, appearDone?: string,_
+_enter?: string, enterActive?: string, enterDone?: string,_
+_exit?: string, exitActive?: string, exitDone?: string }_  
+_default: ''_
+
+##### onEnter
+
+A `<Transition>` callback fired immediately after the `enter` or `appear` class
+is applied.
+
+_type: Function(node: HtmlElement, isAppearing: bool)_
+
+##### onEntering
+
+A `<Transition>` callback fired immediately after the `enter-active` or
+`appear-active` class is applied.
+
+_type: Function(node: HtmlElement, isAppearing: bool)_
+
+##### onEntered
+
+A `<Transition>` callback fired immediately after the `enter` or `appear`
+classes are removed and the `enter-done` class is added to the DOM node.
+
+_type: Function(node: HtmlElement, isAppearing: bool)_
+
+##### onExit
+
+A `<Transition>` callback fired immediately after the `exit` class is applied.
+
+_type: Function(node: HtmlElement)_
+
+##### onExiting
+
+A `<Transition>` callback fired immediately after the `exit-active` is applied.
+
+_type: Function(node: HtmlElement)_
+
+##### onExited
+
+A `<Transition>` callback fired immediately after the `exit` classes are
+removed and the `exit-done` class is added to the DOM node.
+
+_type: Function(node: HtmlElement)_
 
 ---
 
