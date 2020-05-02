@@ -16,16 +16,12 @@
   "module": "dist/esm/index.es.js",
   "typings": "dist/types/index.d.ts",
   "files": [
-    "dist/"
+    "dist"
   ],
   "scripts": {
-    "build": "jvdx build rollup 'src/index.tsx' -f cjs,esm -c",
-    "lint": "jvdx lint",
-    "format": "jvdx format",
-    "test": "jvdx test",
-    "validate": "npm run format && npm run lint && npm run test",
-    "clean": "jvdx clean dist && (cd examples/basic && yarn clean); (cd examples/transition-group && yarn clean); (cd examples/css-transition && yarn clean);",
-    "prepublish": "npm run build"
+    "start": "./Taskfile.sh",
+    "test": "./Taskfile.sh test",
+    "prepublish": "./Taskfile.sh build"
   },
   "dependencies": {
     "@babel/runtime": "7.9.6",
