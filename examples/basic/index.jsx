@@ -1,6 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { Transition } from '../../src/index';
+
+// Demonstrates the core Transition component using the render-prop form.
+// The child function receives the current status string and applies inline
+// styles directly, making the transition purely JS-driven with no CSS classes.
 
 const App = () => {
   const [show, setShow] = React.useState(false);
@@ -43,4 +47,4 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);

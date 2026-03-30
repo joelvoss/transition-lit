@@ -1,6 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { CSSTransition } from '../../src/index';
+
+// Demonstrates CSSTransition with string classNames.
+// CSSTransition automatically adds and removes CSS classes at each phase:
+//   alert-enter, alert-enter-active, alert-enter-done
+//   alert-exit,  alert-exit-active,  alert-exit-done
+// The actual styles are defined in index.html.
 
 const App = () => {
   const [show, setShow] = React.useState(false);
@@ -20,4 +26,4 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
