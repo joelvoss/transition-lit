@@ -1,4 +1,5 @@
-import React from 'react';
-import { ContextValue } from './types';
+import { createContext } from 'react';
 
-export default React.createContext<ContextValue | null>(null);
+import type { ContextValue } from './types';
+
+export default createContext<ContextValue | null>(null);

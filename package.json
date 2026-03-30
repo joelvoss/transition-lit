@@ -1,49 +1,54 @@
 {
-  "name": "transition-lit",
-  "description": "Rudimentary animation/transition library written for React applications",
-  "version": "1.0.0",
-  "license": "MIT",
-  "author": "Joel Voß <joel.voss@twt.de>",
-  "homepage": "https://github.com/joelvoss/transition-lit",
-  "bugs": {
-    "url": "https://github.com/joelvoss/transition-lit/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/joelvoss/transition-lit.git"
-  },
-  "main": "dist/cjs/index.cjs.js",
-  "module": "dist/esm/index.es.js",
-  "typings": "dist/types/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "start": "./Taskfile.sh",
-    "test": "./Taskfile.sh test",
-    "prepublish": "./Taskfile.sh build"
-  },
-  "dependencies": {
-    "@babel/runtime": "7.9.6",
-    "dom-helpers": "5.1.4"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "5.5.0",
-    "@testing-library/react": "10.0.4",
-    "@types/jest": "25.2.1",
-    "@types/react": "16.9.34",
-    "@types/react-dom": "16.9.7",
-    "jvdx": "1.2.0",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
-  },
-  "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "jvdx pre-commit"
-    }
-  }
+	"name": "transition-lit",
+	"description": "Rudimentary animation/transition library written for React applications",
+	"version": "2.0.0",
+	"author": "Joel Voss <mail@joelvoss.com>",
+	"license": "MIT",
+	"homepage": "https://github.com/joelvoss/transition-lit",
+	"bugs": {
+		"url": "https://github.com/joelvoss/transition-lit/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/joelvoss/transition-lit.git"
+	},
+	"type": "module",
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md"
+	],
+	"source": "./src/index.tsx",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		"types": "./dist/index.d.ts",
+		"import": "./dist/index.js",
+		"require": "./dist/index.cjs"
+	},
+	"scripts": {
+		"test": "./Taskfile.sh test",
+		"prepublishOnly": "./Taskfile.sh build"
+	},
+	"devDependencies": {
+		"@types/node": "25.5.0",
+		"@types/react": "19.2.14",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react": "6.0.1",
+		"@vitest/browser-playwright": "4.1.2",
+		"oxfmt": "0.42.0",
+		"oxlint": "1.57.0",
+		"react": "19.2.4",
+		"react-dom": "19.2.4",
+		"typescript": "6.0.2",
+		"vite": "8.0.3",
+		"vite-plugin-bundle-dts": "0.2.0",
+		"vitest": "4.1.2",
+		"vitest-browser-react": "2.1.0"
+	},
+	"peerDependencies": {
+		"react": ">=17",
+		"react-dom": ">=17"
+	}
 }

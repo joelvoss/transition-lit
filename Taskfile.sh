@@ -1,60 +1,76 @@
 #!/bin/bash
+
+set -e
 PATH=./node_modules/.bin:$PATH
 
 # //////////////////////////////////////////////////////////////////////////////
+# START tasks
 
-# Default task (executed when no <task> argument was given)
-function default {
-  validate
-  build
+start_dev() {
+  vite
 }
 
-function build {
-  jvdx build rollup 'src/index.tsx' -f cjs,esm -c
+build() {
+  echo "Building..."
+  rm -rf dist
+  vite build
 }
 
-function format {
-  jvdx format "${@:1}"
+format() {
+  echo "Running oxfmt..."
+
+  oxfmt --write ./src ./tests $*
 }
 
-function lint {
-  jvdx lint "${@:1}"
+lint() {
+  echo "Running oxlint..."
+  # NOTE: Use --fix to auto-fix linting errors
+	oxlint ./src ./tests $*
 }
 
-function test {
-  jvdx test
+typecheck() {
+  echo "Running tsc..."
+  tsc --noEmit
 }
 
-function validate {
-  format "${@:1}"
-  lint "${@:1}"
+test() {
+  if [ "$1" = "-w" ] || [ "$1" = "--watch" ]; then
+    echo "Running vitest in watch mode..."
+    vitest
+    return
+  else
+    echo "Running vitest..."
+    vitest run
+  fi
+}
+
+validate() {
+  typecheck
+  lint
   test
 }
 
-function clean {
-  jvdx clean dist "${@:1}"
-  (cd examples/basic && yarn clean)
-  (cd examples/transition-group && yarn clean)
-  (cd examples/css-transition && yarn clean)
+clean() {
+  rm -rf node_modules dist
 }
 
+help() {
+  echo "Usage: $0 <command>"
+  echo
+  echo "Commands:"
+  echo "  start_dev   Start development server"
+  echo "  build       Build for production"
+  echo "  format      Format code"
+  echo "  typecheck   Typecheck code"
+  echo "  lint        Lint code"
+  echo "  test        Run tests"
+  echo "  validate    Validate code"
+  echo "  clean       Clean temporary files/directories"
+  echo "  help        Show help"
+  echo
+}
+
+# END tasks
 # //////////////////////////////////////////////////////////////////////////////
 
-function help {
-  printf "$(_now) Usage: $0 <task> <args>\n\n"
-}
-
-function _now {
-  time=$(date +'%H:%M:%S')
-  printf "\e[2m[$time]\e[0m"
-}
-
-function _checkmark {
-  printf "\e[1m\e[32m✓\e[0m"
-}
-
-TASK=${@:-default}
-
-printf "$(_now) \e[1m\e[96mTaskfile\e[0m $TASK\n\n"
-${@:-default}
-printf "\n"
+${@:-help}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>CSSTransition — appear &amp; classNames object example</title>
+    <style>
+      /* String classNames="fade" */
+      .fade-appear,
+      .fade-enter {
+        opacity: 0;
+        transform: translateX(-12px);
+      }
+      .fade-appear-active,
+      .fade-enter-active {
+        opacity: 1;
+        transform: translateX(0);
+        transition: opacity 400ms ease, transform 400ms ease;
+      }
+      .fade-appear-done,
+      .fade-enter-done {
+        opacity: 1;
+      }
+      .fade-exit {
+        opacity: 1;
+      }
+      .fade-exit-active {
+        opacity: 0;
+        transform: translateX(12px);
+        transition: opacity 300ms ease, transform 300ms ease;
+      }
+      .fade-exit-done {
+        opacity: 0;
+      }
+
+      /* Object classNames variant — custom class names */
+      .slide-in        { opacity: 0; transform: translateY(-12px); }
+      .slide-in-active { opacity: 1; transform: translateY(0); transition: opacity 400ms ease, transform 400ms ease; }
+      .slide-in-done   { opacity: 1; }
+      .slide-out       { opacity: 1; }
+      .slide-out-active { opacity: 0; transform: translateY(12px); transition: opacity 300ms ease, transform 300ms ease; }
+      .slide-out-done  { opacity: 0; }
+
+      .box {
+        padding: 10px 14px;
+        background: #fff3cd;
+        margin-top: 8px;
+        border-left: 4px solid #ffc107;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./index.jsx"></script>
+  </body>
+</html>

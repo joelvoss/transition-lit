@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 export type EnterHandler = (node: HTMLElement, isAppearing?: boolean) => void;
 export type ExitHandler = (node: HTMLElement) => void;
@@ -10,69 +10,69 @@ export const ENTERED = 'entered';
 export const EXITING = 'exiting';
 
 export interface TransitionActions {
-  appear?: boolean;
-  enter?: boolean;
-  exit?: boolean;
+	appear?: boolean;
+	enter?: boolean;
+	exit?: boolean;
 }
 
 interface BaseTransitionProps {
-  in?: boolean;
-  mountOnEnter?: boolean;
-  unmountOnExit?: boolean;
-  onEnter?: EnterHandler;
-  onEntering?: EnterHandler;
-  onEntered?: EnterHandler;
-  onExit?: ExitHandler;
-  onExiting?: ExitHandler;
-  onExited?: ExitHandler;
-  children?: TransitionChildren;
-  [prop: string]: any;
+	in?: boolean;
+	mountOnEnter?: boolean;
+	unmountOnExit?: boolean;
+	onEnter?: EnterHandler;
+	onEntering?: EnterHandler;
+	onEntered?: EnterHandler;
+	onExit?: ExitHandler;
+	onExiting?: ExitHandler;
+	onExited?: ExitHandler;
+	children?: TransitionChildren;
+	[prop: string]: unknown;
 }
 
 export type TransitionStatus =
-  | typeof ENTERING
-  | typeof ENTERED
-  | typeof EXITING
-  | typeof EXITED
-  | typeof UNMOUNTED;
+	| typeof ENTERING
+	| typeof ENTERED
+	| typeof EXITING
+	| typeof EXITED
+	| typeof UNMOUNTED;
 
 export type TransitionChildren =
-  | ReactNode
-  | ((status: TransitionStatus) => ReactNode);
+	| ReactNode
+	| ((status: TransitionStatus) => ReactNode);
 
 export interface TransitionProps extends BaseTransitionProps {
-  timeout: number | { appear?: number; enter?: number; exit?: number };
+	timeout: number | { appear?: number; enter?: number; exit?: number };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 export type ChildMapping = {
-  [x: string]: ReactNode;
+	[x: string]: ReactNode;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 export interface CSSTransitionProps extends TransitionProps {
-  classNames?: string | { [key: string]: string };
+	classNames?: string | { [key: string]: string };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 export interface TransitionGroupProps extends TransitionActions {
-  children?:
-    | ReactElement<TransitionProps>
-    | Array<ReactElement<TransitionProps>>;
-  childFactory?(child: ReactNode): ReactNode;
-  [prop: string]: any;
+	children?:
+		| ReactElement<TransitionProps>
+		| Array<ReactElement<TransitionProps>>;
+	childFactory?(child: ReactNode): ReactNode;
+	[prop: string]: unknown;
 }
 
 export interface TransitionGroupState {
-  contextValue: ContextValue;
-  children: ChildMapping;
+	contextValue: ContextValue;
+	children: ChildMapping;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 export type ContextValue = {
-  isMounting?: boolean;
+	isMounting?: boolean;
 };

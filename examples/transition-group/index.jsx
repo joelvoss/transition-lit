@@ -1,20 +1,25 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { v4 as uuid } from 'uuid';
+import ReactDOM from 'react-dom/client';
 import { Transition, TransitionGroup } from '../../src/index';
+
+// Demonstrates TransitionGroup managing a dynamic keyed list.
+// TransitionGroup tracks which children are entering or leaving and keeps
+// exiting children alive in the DOM until their exit animation completes.
+// FadeTransition is a small wrapper that wires Transition to inline opacity
+// styles and passes through the in/...rest props supplied by TransitionGroup.
 
 const App = () => {
   const [items, setItems] = React.useState([
-    { id: uuid() },
-    { id: uuid() },
-    { id: uuid() },
-    { id: uuid() },
+    { id: crypto.randomUUID() },
+    { id: crypto.randomUUID() },
+    { id: crypto.randomUUID() },
+    { id: crypto.randomUUID() },
   ]);
 
   return (
     <div>
       <h1>TransitionGroup example</h1>
-      <button onClick={() => setItems(items => [...items, { id: uuid() }])}>
+      <button onClick={() => setItems(items => [...items, { id: crypto.randomUUID() }])}>
         Add
       </button>
       <TransitionGroup>
@@ -72,4 +77,4 @@ const FadeTransition = ({ in: inProp, children, ...rest }) => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
