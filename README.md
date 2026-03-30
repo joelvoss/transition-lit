@@ -31,21 +31,23 @@ a transition from one state to another over a fixed period of time.
 
 ```js
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { Transition } from 'transition-lit';
 
 const App = () => {
+  const [inProp, setInProp] = React.useState(false);
+
   // [1] Define the duration of the transition.
   const duration = {
     enter: 150,
     exit: 75,
   };
 
-  // [2] Define the components default styling. Notice that we aren't using the
+  // [2] Define the component's default styling. Notice that we aren't using the
   // `transition` shorthand property because we want to use different transition
   // durations for enter and exit transitions as defined in [1].
   const defaultStyle = {
-    tansitionProperty: 'opacity',
+    transitionProperty: 'opacity',
     transitionTimingFunction: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
     opacity: 0,
   };
@@ -58,10 +60,11 @@ const App = () => {
     exited: { opacity: 0, transitionDuration: `${duration.exit}ms` },
   };
 
-  // [4] Use the <Transition /> component to expose the differen transition
+  // [4] Use the <Transition /> component to expose the different transition
   // states for you to act on. The transition state is toggled by the `in` prop.
   return (
     <div>
+      <button onClick={() => setInProp(v => !v)}>Toggle</button>
       <Transition in={inProp} timeout={duration}>
         {state => (
           <div
@@ -78,7 +81,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 ```
 
 #### Props
@@ -117,8 +120,8 @@ _default: false_
 
 ##### unmountOnExit
 
-By default a child component stays mounted event after the exit transition ends.
-Set the `unmountOnExit` prop to disabled this behaviour and unmount the child
+By default a child component stays mounted even after the exit transition ends.
+Set the `unmountOnExit` prop to disable this behaviour and unmount the child
 component after it finishes exiting.
 
 _type: boolean_  
@@ -130,25 +133,26 @@ By default a child component is not transitioned in if it is shown when the
 `Transition` component mounts. By setting the `appear` prop you can force a
 enter transition on mount.
 
-> **Note:** There are no additional 'appear' states. Instead this prop adds an
-> additional enter transition.
+> **Note:** For `<Transition />` there are no additional appear states — the
+> same `entering`/`entered` states are used. `<CSSTransition />` does add
+> dedicated `*-appear`, `*-appear-active`, and `*-appear-done` CSS classes.
 
 _type: boolean_  
 _default: false_
 
 ##### enter
 
-Enable/disabled enter transitions.
+Enable/disable enter transitions.
 
 _type: boolean_  
-_default: false_
+_default: true_
 
 ##### exit
 
 Enable/disable exit transitions.
 
 _type: boolean_  
-_default: false_
+_default: true_
 
 ##### timeout
 
@@ -174,49 +178,49 @@ _required_
 ##### onEnter
 
 Callback fired before the `entering` status is applied. The node argument is
-the currently transitioned DOMElement. The isAppearing parameter is indicating
+the currently transitioned DOM element. The isAppearing parameter indicates
 if the transition happens on initial mount.
 
-_type: Function(node: HtmlElement, isAppearing: boolean): void_  
+_type: Function(node: HTMLElement, isAppearing: boolean): void_  
 _default: Function(): void_
 
 ##### onEntering
 
 Callback fired after the `entering` status is applied. The node argument is
-the currently transitioned DOMElement. The isAppearing parameter is indicating
+the currently transitioned DOM element. The isAppearing parameter indicates
 if the transition happens on initial mount.
 
-_type: Function(node: HtmlElement, isAppearing: boolean): void_  
+_type: Function(node: HTMLElement, isAppearing: boolean): void_  
 _default: Function(): void_
 
 ##### onEntered
 
 Callback fired after the `entered` status is applied. The node argument is
-the currently transitioned DOMElement. The isAppearing parameter is indicating
+the currently transitioned DOM element. The isAppearing parameter indicates
 if the transition happens on initial mount.
 
-_type: Function(node: HtmlElement, isAppearing: boolean): void_  
+_type: Function(node: HTMLElement, isAppearing: boolean): void_  
 _default: Function(): void_
 
 ##### onExit
 
 Callback fired before the `exiting` status is applied.
 
-_type: Function(node: HtmlElement): void_  
+_type: Function(node: HTMLElement): void_  
 _default: Function(): void_
 
 ##### onExiting
 
 Callback fired after the `exiting` status is applied.
 
-_type: Function(node: HtmlElement): void_  
+_type: Function(node: HTMLElement): void_  
 _default: Function(): void_
 
 ##### onExited
 
 Callback fired after the `exited` status is applied.
 
-_type: Function(node: HtmlElement): void_  
+_type: Function(node: HTMLElement): void_  
 _default: Function(): void_
 
 ---
@@ -237,25 +241,24 @@ in prop is toggled automatically by the `<TransitionGroup>`.
 
 ```js
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { v4 as uuid } from 'uuid';
-import { Transition, TransitionGroup } from 'transition-lit';
+import ReactDOM from 'react-dom/client';
+import { CSSTransition, TransitionGroup } from 'transition-lit';
 
 const App = () => {
   const [items, setItems] = React.useState([
-    { id: uuid() },
-    { id: uuid() },
-    { id: uuid() },
-    { id: uuid() },
+    { id: crypto.randomUUID() },
+    { id: crypto.randomUUID() },
+    { id: crypto.randomUUID() },
+    { id: crypto.randomUUID() },
   ]);
 
   const addItem = () => {
-    setItems(items => [...items, { id: uuid() }]);
-  }
+    setItems(items => [...items, { id: crypto.randomUUID() }]);
+  };
 
   const removeItem = id => {
-    setItems(items => items.filter(item => item.id !== id);
-  }
+    setItems(items => items.filter(item => item.id !== id));
+  };
 
   return (
     <>
@@ -275,7 +278,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 ```
 
 #### Props
@@ -335,7 +338,7 @@ _default: child => child_
 ### `<CSSTransition />`
 
 A transition component inspired by [ng-animate][ng-animate]. It should be used
-if animations are beeing done by declaring transitions via CSS classes.
+if animations are being done by declaring transitions via CSS classes.
 
 `CSSTransition` applies a pair of class names during the appear, enter, and
 exit states of the transition. The first class is applied and then a second
@@ -442,44 +445,40 @@ _default: ''_
 A `<Transition>` callback fired immediately after the `enter` or `appear` class
 is applied.
 
-_type: Function(node: HtmlElement, isAppearing: bool)_
+_type: Function(node: HTMLElement, isAppearing: boolean)_
 
 ##### onEntering
 
 A `<Transition>` callback fired immediately after the `enter-active` or
 `appear-active` class is applied.
 
-_type: Function(node: HtmlElement, isAppearing: bool)_
+_type: Function(node: HTMLElement, isAppearing: boolean)_
 
 ##### onEntered
 
 A `<Transition>` callback fired immediately after the `enter` or `appear`
 classes are removed and the `enter-done` class is added to the DOM node.
 
-_type: Function(node: HtmlElement, isAppearing: bool)_
+_type: Function(node: HTMLElement, isAppearing: boolean)_
 
 ##### onExit
 
 A `<Transition>` callback fired immediately after the `exit` class is applied.
 
-_type: Function(node: HtmlElement)_
+_type: Function(node: HTMLElement)_
 
 ##### onExiting
 
 A `<Transition>` callback fired immediately after the `exit-active` is applied.
 
-_type: Function(node: HtmlElement)_
+_type: Function(node: HTMLElement)_
 
 ##### onExited
 
 A `<Transition>` callback fired immediately after the `exit` classes are
 removed and the `exit-done` class is added to the DOM node.
 
-_type: Function(node: HtmlElement)_
-
----
-
-This project was bootstrapped with [jvdx](https://github.com/joelvoss/jvdx).
+_type: Function(node: HTMLElement)_
 
 [react-spring]: https://www.react-spring.io/
 [ng-animate]: https://github.com/jiayihu/ng-animate
