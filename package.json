@@ -1,7 +1,7 @@
 {
 	"name": "transition-lit",
 	"description": "Rudimentary animation/transition library written for React applications",
-	"version": "3.1.1",
+	"version": "3.2.0",
 	"author": "Joel Voss <mail@joelvoss.com>",
 	"license": "MIT",
 	"homepage": "https://github.com/joelvoss/transition-lit",
